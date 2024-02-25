@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Timer with Pre-displayed Clock</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='custom.css'>
+  <style>
+    body {
+    transform: scale(1.2);
+}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="flex-center">
+    <div class="clock-container">
+      <div id="clock" class="flip-clock-wrapper"></div>
+    </div>
+    <div id="btns">
+      <button class="timer-button" id="start120">2 Minutes</button>
+      <button class="timer-button" id="start90">90 Seconds</button>
+      <button class="timer-button" id="start60">60 Seconds</button>
+    </div>
+  </div>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.min.js'></script>
+<script>
+$(document).ready(function() {
+  var clock; // Declare the clock variable outside to make it accessible in the entire scope.
+
+  function createClock() {
+    // Helper function to create a new FlipClock instance.
+    clock = $('#clock').FlipClock({
+      clockFace: 'MinuteCounter',
+      autoStart: false,
+      countdown: true, // Make sure the countdown is set to true
+      callbacks: {
+        stop: function() {
+          displayGifForAWhile(); // Call the function when the timer stops
+        }
+      }
+    });
+  }
+
+  function displayGifForAWhile() {
+    var gifUrl = 'workout.gif'; // Replace with the local path to your GIF
+    // Create the GIF container and style it for full screen
+    var gifContainer = $('<div id="gifContainer" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 9999; display: flex; justify-content: center; align-items: center;"></div>');
+    // Append an image tag with the GIF to the container and add it to the body
+    gifContainer.append('<img src="' + gifUrl + '" style="max-width: 100%; max-height: 100%; margin: auto;" alt="Time\'s up!" />').appendTo('body');
+
+    // Show the GIF container
+    gifContainer.show();
+
+    // Set a timeout to hide the GIF and remove the container, then show the clock again
+    setTimeout(function() {
+      gifContainer.remove();
+      $('#clock').show();
+    }, 5000); // Display the GIF for 5 seconds
+  }
+
+  createClock(); // Initialize the clock when document is ready.
+
+  // Event listeners for the buttons
+  $('#start120').click(function(e) {
+    e.preventDefault();
+    createClock();
+    clock.setTime(120);
+    clock.start();
+  });
+
+  $('#start90').click(function(e) {
+    e.preventDefault();
+    createClock();
+    clock.setTime(90);
+    clock.start();
+  });
+
+  $('#start60').click(function(e) {
+    e.preventDefault();
+    createClock();
+    clock.setTime(60);
+    clock.start();
+  });
+});
+</script>
+
+</body>
+</html>
